@@ -1,0 +1,6 @@
+latency_ms = 50
+time_to_live = 10
+num_nodes = 1_000
+num_neighbors = 24
+num_peers = 8
+num_runs = 1
