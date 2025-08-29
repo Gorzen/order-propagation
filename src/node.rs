@@ -98,7 +98,7 @@ async fn send_gossip_packet_with_delay(
     neighbor_id: NodeId,
     packet: SerialiedPacket,
     latency: Duration,
-) -> () {
+) {
     tokio::time::sleep(latency).await;
 
     // In a real application, you'd want to better handle potential errors sending the packet.

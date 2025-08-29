@@ -63,15 +63,21 @@ async fn propagate_message(
     let mut latencies = Vec::with_capacity(threshold);
 
     loop {
-        // Ignore messages that are not for that packet_id (can happen if num_runs is > 1)
-        if let Some(packet_id) = report_rx.recv().await
-            && packet_id == packet.id
-        {
-            received_count += 1;
-            latencies.push(now.elapsed());
-            if received_count >= threshold {
-                println!("Propagation threshold reached!");
-                break;
+        match report_rx.recv().await {
+            Some(packet_id) => {
+                // Ignore messages that are not for that packet_id (can happen if num_runs is > 1)
+                if packet_id == packet.id {
+                    received_count += 1;
+                    latencies.push(now.elapsed());
+                    if received_count >= threshold {
+                        println!("Propagation threshold reached!");
+                        break;
+                    }
+                }
+            }
+            None => {
+                eprintln!("Report channel closed. Exiting...");
+                exit(1)
             }
         }
     }
